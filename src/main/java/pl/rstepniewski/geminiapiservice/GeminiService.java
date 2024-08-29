@@ -90,7 +90,21 @@ public class GeminiService {
 
     public String generateContent(String fileUri, String question) {
         String endpoint = BASE_URL + "/v1beta/models/gemini-1.5-flash:generateContent?key=" + GOOGLE_API_KEY;
-        String jsonInputString = "{ \"contents\": [{ \"parts\": [ {\"text\": \"" + question + "\"}, {\"file_data\": {\"mime_type\": \"application/pdf\", \"file_uri\": \"" + fileUri + "\"}} ] } ] }";
+        String jsonInputString = "{\n" +
+                "  \"contents\": [\n" +
+                "    {\n" +
+                "      \"parts\": [\n" +
+                "        {\"text\": \"" + question + "\"},\n" +
+                "        {\n" +
+                "          \"file_data\": {\n" +
+                "            \"mime_type\": \"application/pdf\",\n" +
+                "            \"file_uri\": \"" + fileUri + "\"\n" +
+                "          }\n" +
+                "        }\n" +
+                "      ]\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
