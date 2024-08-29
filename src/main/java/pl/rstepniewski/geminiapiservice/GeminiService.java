@@ -1,6 +1,5 @@
 package pl.rstepniewski.geminiapiservice;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -25,7 +24,7 @@ public class GeminiService {
         this.restTemplate = new RestTemplate();
     }
 
-    public String initiateResumableUpload(String mimeType, long numBytes, String displayName) {
+    public String initiateResumableUpload(String displayName) {
         String endpoint = BASE_URL + "/upload/v1beta/files?key=" + GOOGLE_API_KEY;
         String jsonInputString = "{\"file\": {\"display_name\": \"" + displayName + "\"}}";
 
@@ -47,7 +46,7 @@ public class GeminiService {
         return uploadUrl;
     }
 
-    public void uploadFile(String uploadUrl, long numBytes, String filePath) {
+    public void uploadFile(String uploadUrl, String filePath) {
         try {
             byte[] fileContents = Files.readAllBytes(Paths.get(filePath));
 
