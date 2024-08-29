@@ -3,6 +3,7 @@ package pl.rstepniewski.geminiapiservice;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -16,11 +17,11 @@ import java.nio.file.Paths;
 public class GeminiService {
 
     private static final String BASE_URL = "https://generativelanguage.googleapis.com";
-    private static final String GOOGLE_API_KEY = "AIzaSyBhtwlpYuEM5DvNSsTwwwVqRluIRqWmsS0";
-
+    private final String GOOGLE_API_KEY;
     private final RestTemplate restTemplate;
 
-    public GeminiService() {
+    public GeminiService(@Value("${google.api.key}") String googleApiKey) {
+        this.GOOGLE_API_KEY = googleApiKey;
         this.restTemplate = new RestTemplate();
     }
 
