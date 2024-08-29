@@ -1,27 +1,28 @@
 package pl.rstepniewski.geminiapiservice;
 
-import io.github.resilience4j.decorators.Decorators;
 import io.github.resilience4j.retry.Retry;
+import io.github.resilience4j.retry.RetryRegistry;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 @RequiredArgsConstructor
 public class ResilientGeminiService {
+
     private final GeminiService geminiService;
     private final Retry retry;
 
     public Optional<String> uploadFile(String mimeType, long numBytes, String displayName) {
-        return Decorators.ofSupplier(() -> Optional.of(geminiService.initiateResumableUpload(mimeType, numBytes, displayName)))
+        return Optional.of(io.github.resilience4j.decorators.Decorators.ofSupplier(() -> geminiService.initiateResumableUpload(mimeType, numBytes, displayName))
                 .withRetry(retry)
-                .withFallback(e -> Optional.empty())
-                .get();
+                .get());
     }
 
     public Optional<String> generateContent(String fileUri, String question) {
-        return Decorators.ofSupplier(() -> Optional.of(geminiService.generateContent(fileUri, question)))
+        return Optional.of(io.github.resilience4j.decorators.Decorators.ofSupplier(() -> geminiService.generateContent(fileUri, question))
                 .withRetry(retry)
-                .withFallback(e -> Optional.empty())
-                .get();
+                .get());
     }
 }
